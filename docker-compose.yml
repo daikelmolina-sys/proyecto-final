@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # Nodo 1: Servidor Web Nginx
+  web:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./frontend:/var/www/frontend
+      - ./backend:/var/www/backend
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+
+  # Nodo 2: Lógica de la API (Laravel)
+  php:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/var/www/backend
+    working_dir: /var/www/backend
+
+  # Nodo 3: Base de Datos MySQL
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: franelas_mundial
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
