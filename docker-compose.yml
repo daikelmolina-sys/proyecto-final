@@ -2,12 +2,13 @@ version: '3.8'
 
 services:
   # Nodo 1: Servidor Web Nginx
+  # Nodo 1: Servidor Web Nginx
   web:
     image: nginx:alpine
     ports:
       - "8000:80"
     volumes:
-      - ./frontend:/var/www/frontend
+      - ./frontend/dist:/var/www/frontend   # <-- ¡AQUÍ ESTÁ EL CAMBIO! Agregamos /dist
       - ./backend:/var/www/backend
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
